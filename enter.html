@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>登录-罗技官方商城</title>
+    <link rel="stylesheet" href="css/enter.css">
+</head>
+<body>
+    <!-- header -->
+    <div id="head">
+        <a id="login" href="index.html"></a>
+    </div>
+    <!-- body -->
+    <div id="bod">
+        <a id="bj" href="index.html" title="1"></a>
+        <div id="enter">
+            <div id="enter_l">
+                <h4>
+                    <span>账户登录</span>
+                    <a href="enroll.html">手机快速注册></a>
+                </h4>
+                <div id="yc">
+                    <span id="yc1"></span>
+                    <span id="yc2">
+                        <img src="img/enter/cc.png" alt="">
+                        <span id="yc2_1"></span>
+                    </span>
+                    
+                </div>
+                <div id="enter_l_i1">
+                    <img src="img/enter/b_i_1.png" alt="">
+                    <input id="enter_l_i11" type="text" placeholder="手机号/邮箱/账户名">
+                </div>
+                <div id="enter_l_i2">
+                    <img src="img/enter/b_i_2.png" alt="">
+                    <input id="enter_l_i22" type="password" placeholder="密码">
+                </div>
+                <div id="enter_l_i3">
+                    <input id="enter_l_i33" type="text"  placeholder="&nbsp;&nbsp;&nbsp;请输入验证码">
+                    <canvas id="canvas1" class="yzm"></canvas>
+                </div>
+                <div id="enter_l_i4"> 
+                    <input type="checkbox">
+                    <span>自动登录</span>
+                    <a href="#">忘记密码</a>
+                </div>
+                <input id="enter_l_i5" type="button" value="登&nbsp;&nbsp;陆">
+                <div id="enter_l_i6">
+                    <p>其他方式登录 :</p>
+                    <a id="enter_l_i6a1" href="#"></a>
+                    <a id="enter_l_i6a2" href="#"></a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- footer -->
+    <div id="foot">
+        <p>罗技官方商城由罗技（中国）科技有限公司授权双齐国际贸易（上海）有限公司负责经营 2016 , all rights reserved</p>
+        <p>
+            <a href="#">罗技官方网站</a>
+            <a href="#">联系方式</a>
+            <a href="#">隐私声明</a>
+            <a href="#">用户服务协议</a>
+            <a href="#">沪ICP备10200262号</a>
+        </p>
+    </div>
+</body>
+</html>
+<script tyep="text/javascript" src="js/jquery-1.8.3.min.js"></script>
+<script tyep="text/javascript" src="js/cookieTools.js"></script>
+<script tyep="text/javascript">
+$(function(){
+    $("#enter_l_i11").focus(function(){
+        $("#enter_l_i1").css({border:"1px solid #4173b6"})
+    });
+    $("#enter_l_i11").blur(function(){
+        $("#enter_l_i11").parent().css({border:"1px solid #bfbfbf"})
+    });
+    $("#enter_l_i22").focus(function(){
+        $("#enter_l_i2").css({border:"1px solid #4173b6"})
+    });
+    $("#enter_l_i22").blur(function(){
+        $("#enter_l_i2").css({border:"1px solid #bfbfbf"})
+    });
+    $("#enter_l_i33").focus(function(){
+        $("#enter_l_i33").css({border:"1px solid #97b5f9"})
+        $("#enter_l_i33").css({borderRight:"none"})
+    });
+    $("#enter_l_i33").blur(function(){
+        $("#enter_l_i33").css({border:"1px solid white"})
+        $("#enter_l_i33").css({borderRight:"none"})
+    });
+    var show_num = [];
+    draw(show_num);
+    $("#canvas1").on('click',function(){
+        draw(show_num);
+    })
+    
+    // 登陆
+    var username=$("#enter_l_i11").val();
+    var password=$("#enter_l_i22").val();
+    var yzm=$("#enter_l_i33").val();
+    $("#enter_l_i5").click(function(){
+        let username=$("#enter_l_i11").val();
+        let password=$("#enter_l_i22").val();
+        let yzm=$("#enter_l_i33").val().toLowerCase();
+        let num = show_num.join("");
+        if(username==""){
+            $("#yc").css("display","block");
+            $("#yc2_1").html("请输入账号");
+        }else{
+            if(password==""){
+                $("#yc").css("display","block");
+                $("#yc2_1").html("请输入密码");
+            }else{
+                if(yzm==""){
+                    $("#yc").css("display","block");
+                    $("#yc2_1").html("请输入验证码");
+                }else if(yzm!=num){
+                    $("#enter_l_i33").val("");
+                    $("#yc").css("display","block");
+                    $("#yc2_1").html("验证码输入错误");
+                    draw(show_num);
+                }else{
+                    $.get("enter.php",{"username":username,"passwords":password},function(data){
+                        if(data==1){
+                            saveCookie("username",username,7);
+                            alert("登录成功");
+                            location.href="index.html";
+                        }else{
+                            alert("登录失败");
+                            draw(show_num);
+                        }
+                    });
+                }
+            }
+        }
+    })
+    // 1用户名
+    
+
+    // 2密码
+    $("#password2").blur(function(){
+        let str = $("#enter_l_i22").val();
+        let reg = /^[\w]{6,}$/ ;
+        if(str==""){
+            return;
+        }else if(reg.test(str)){
+            $("#enter_l_i22").next("span").html("√");
+        }else{
+            $("#enter_l_i22").next("span").html("×");
+        }
+    });
+})
+// 验证码样式
+function draw(show_num) {
+    var canvas_width=$('#canvas1').width();
+    var canvas_height=$('#canvas1').height();
+    var canvas = document.getElementById("canvas1");//获取到canvas的对象，演员
+    var context = canvas.getContext("2d");//获取到canvas画图的环境，演员表演的舞台
+    canvas.width = canvas_width;
+    canvas.height = canvas_height;
+    var sCode = "1,2,3,4,5,6,7,8,9,0";
+    var aCode = sCode.split(",");
+    var aLength = aCode.length;//获取到数组的长度
+    
+    for (var i = 0; i <= 4; i++) {
+        var j = Math.floor(Math.random() * aLength);//获取到随机的索引值
+        // var deg = Math.random() * 0 * Math.PI / 180;//产生0~30之间的随机弧度
+        var txt = aCode[j];//得到随机的一个内容
+        show_num[i] = txt.toLowerCase();
+        var x = 10 + i * 14;//文字在canvas上的x坐标
+        var y = 30;//文字在canvas上的y坐标
+        context.font = "bold 23px 微软雅黑";
+        context.translate(x, y); 
+        context.fillStyle = randomColor();
+        context.fillText(txt, 0, 0);
+        context.translate(-x, -y);
+    }
+    //验证码上显示线条
+    for (var i = 0; i <= 5; i++) { 
+        context.strokeStyle = randomColor();
+        context.beginPath();
+        context.moveTo(Math.random() * canvas_width, Math.random() * canvas_height);
+        context.lineTo(Math.random() * canvas_width, Math.random() * canvas_height);
+        context.stroke();
+    }
+    //验证码上显示小点
+    for (var i = 0; i <= 30; i++) { 
+        context.strokeStyle = randomColor();
+        context.beginPath();
+        var x = Math.random() * canvas_width;
+        var y = Math.random() * canvas_height;
+        context.moveTo(x, y);
+        context.lineTo(x + 1, y + 1);
+        context.stroke();
+    }
+}
+function randomColor() {//得到随机的颜色值
+    var r = Math.floor(Math.random() * 256);
+    var g = Math.floor(Math.random() * 256);
+    var b = Math.floor(Math.random() * 256);
+    return "rgb(" + r + "," + g + "," + b + ")";
+}
+
+</script>

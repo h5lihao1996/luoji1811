@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>注册-罗技官方商城</title>
+    <link rel="stylesheet" href="css/enroll.css">
+</head>
+<body>
+    <!-- header -->
+    <div id="head">
+        <a id="login" href="index.html"></a>
+    </div>
+    <!-- body -->
+    <div id="bod">
+        <div id="bod_l">
+            <h3>
+                <p>注册</p>
+                <p>已是会员，去
+                    <a href="enter.html"> 登录></a>
+                </p>
+            </h3>
+            <div id="bod_l_i1">
+                <span id="bod_l_i1s">手机号</span>
+                <input id="bod_l_i1i" type="text" placeholder="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;建议使用常用手机">
+                <div id="bod_l_yc2_1">
+                    <img src="img/enroll/cc.png" alt="">
+                    <span id="bod_l_yc2_1w"></span>
+                </div>
+                <span id="bod_l_is1">
+                    <img src="img/enroll/yc2.png" alt="">
+                </span>
+            </div>
+            <div id="bod_l_yc1_1">
+                <img src="img/enroll/yc1.png" alt="">
+                <span>手机号很重要，它可以用来登录和找回密码哦</span>
+            </div>
+            <div id="bod_l_i2">
+                <div id="bod_l_i2d">
+                    <span>验证码</span>
+                    <input id="bod_l_i2i" type="text"  placeholder="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;请输入验证码">
+                </div>
+                <canvas id="canvas1" class="yzm"></canvas>
+            </div>
+            <div id="bod_l_i3">
+                <span>手机验证码</span>
+                <input id="bod_l_i3i" type="text" placeholder="&nbsp;请输入手机验证码">
+                <a href="#">获取验证码</a>
+            </div>
+            <div id="bod_l_i4">
+                <span id="bod_l_i1s1">设置密码</span>
+                <input id="bod_l_i4i" type="text" placeholder="&nbsp;&nbsp;&nbsp;&nbsp;建议至少两种字符组合">
+                <div id="bod_l_yc2_2">
+                    <img src="img/enroll/cc.png" alt="">
+                    <span id="bod_l_yc2_2w"></span>
+                </div>
+                <span id="bod_l_is2">
+                    <img src="img/enroll/yc2.png" alt="">
+                </span>
+            </div>
+            <div id="bod_l_yc1_2">
+                <img src="img/enroll/yc1.png" alt="">
+                <span id="bod_l_yc1_2s">建议使用数字，字母和符号两种字符以上的组合</span>
+            </div>
+            <div id="bod_l_i5">
+                <span id="bod_l_i1s2">确认密码</span>
+                <input id="bod_l_i5i" type="text" placeholder="&nbsp;&nbsp;&nbsp;&nbsp;请再次输入密码">
+                <div id="bod_l_yc2_3">
+                    <img src="img/enroll/cc.png" alt="">
+                    <span id="bod_l_yc2_3w"></span>
+                </div>
+                <span id="bod_l_is3">
+                    <img src="img/enroll/yc2.png" alt="">
+                </span>
+            </div>
+            <div id="bod_l_i6">
+                <input id="bod_l_i6i" type="checkbox">
+                <span>我已经认证阅读
+                    <a href="#">《用户服务协议》</a>
+                    ，并完全同意协议中的所有条款。
+                </span>
+            </div>
+            <input id="bod_l_i7" type="button" value="立即注册">
+        </div>
+    </div>
+    <!-- footer -->
+    <div id="foot">
+        <p>罗技官方商城由罗技（中国）科技有限公司授权双齐国际贸易（上海）有限公司负责经营 2016 , all rights reserved</p>
+        <p>
+            <a href="#">罗技官方网站</a>
+            <a href="#">联系方式</a>
+            <a href="#">隐私声明</a>
+            <a href="#">用户服务协议</a>
+            <a href="#">沪ICP备10200262号</a>
+        </p>
+    </div>
+</body>
+</html>
+<script tyep="text/javascript" src="js/jquery-1.8.3.min.js"></script>
+<script tyep="text/javascript">
+    $(function(){
+        // 判断
+        var username=$("#bod_l_i1i").val();
+        var password=$("#bod_l_i4i").val();
+        var password1=$("#bod_l_i5i").val();
+        var yzm=$("#bod_l_i2i").val();
+
+        
+        
+        // 表单效果
+            // 手机号
+        $("#bod_l_i1i").focus(function(){
+            let username=$("#bod_l_i1i").val();
+            $("#bod_l_i1").css({border:"1px solid #4173b6"});
+            $("#bod_l_yc1_1").css({visibility:"visible"});
+            if(username!=""){
+                $("#bod_l_yc1_1").css({visibility:"hidden"});
+            }
+        });
+        $("#bod_l_i1i").blur(function(){
+            $("#bod_l_i1").css({border:"1px solid #bfbfbf"})
+            $("#bod_l_yc1_1").css({visibility:"hidden"});
+            let username=$("#bod_l_i1i").val();
+            let reg =/^1([38]\d|5[0-35-9]|7[3678])\d{8}$/;
+            if(reg.test(username)){
+                $("#bod_l_is1").css({display:"block"});
+            }
+            $.get("checkuser.php",{"username":username},function(data){
+                alert(data);
+            });
+        });
+            // 验证码
+        $("#bod_l_i2i").focus(function(){
+            $("#bod_l_i2d").css({border:"1px solid #97b5f9"});
+            $("#bod_l_i2d").css({borderRight:"none"})
+        });
+        $("#bod_l_i2i").blur(function(){
+            $("#bod_l_i2d").css({border:"1px solid #bfbfbf"});
+            $("#bod_l_i2d").css({borderRight:"none"})
+        });
+            // 手机验证码
+        $("#bod_l_i3i").focus(function(){
+            $("#bod_l_i3").css({border:"1px solid #4173b6"});
+        });
+        $("#bod_l_i3i").blur(function(){
+            $("#bod_l_i3").css({border:"1px solid #bfbfbf"});
+        });
+            // 密码
+        $("#bod_l_i4i").focus(function(){
+            $("#bod_l_i4").css({border:"1px solid #4173b6"});
+            $("#bod_l_yc1_2").css({visibility:"visible"});
+            let password=$("#bod_l_i4i").val();
+            if(password!=""){
+                $("#bod_l_yc1_2").css({visibility:"hidden"});
+                $("#bod_l_is2").css({display:"block"});
+            }
+        });
+        $("#bod_l_i4i").blur(function(){
+            let password=$("#bod_l_i4i").val();
+            if(password!=""){
+                $("#bod_l_is2").css({display:"block"});
+            }
+            $("#bod_l_i4").css({border:"1px solid #bfbfbf"});
+            $("#bod_l_yc1_2").css({visibility:"hidden"});
+
+        });
+        // $("#bod_l_i4i").change(function(){
+        //     let password=$("#bod_l_i4i").val();
+        //     let pw1=/^(?:\d+|[a-zA-Z]+|[!@#$%^&*]+)$/i;
+        //     let pw2=/^(?![a-zA-z]+$)(?!\d+$)(?![!@#$%^&*]+$)[a-zA-Z\d!@#$%^&*]+$/;
+        //     let pw3=/^(?![a-zA-z]+$)(?!\d+$)(?![!@#$%^&*]+$)(?![a-zA-z\d]+$)(?![a-zA-z!@#$%^&*]+$)(?![\d!@#$%^&*]+$)[a-zA-Z\d!@#$%^&*]+$/i;
+        //     if(pw1.test(password)){
+        //         $("#bod_l_is2").css({display:"block"});
+        //         $("#bod_l_yc1_2s").html("安全强度适低，可以使用三种以上的组合来提高安全强度");
+        //     }else if(pw2.test(password)){
+        //         $("#bod_l_is2").css({display:"block"});
+        //         $("#bod_l_yc1_2s").html("安全强度适中，可以使用三种以上的组合来提高安全强度");
+        //     }else if(pw3.test(password)){
+        //         $("#bod_l_is2").css({display:"block"});
+        //         $("#bod_l_yc1_2s").html("安全强度适高");
+        //     }
+        // });
+            // 确认密码
+        $("#bod_l_i5i").focus(function(){
+            $("#bod_l_i5").css({border:"1px solid #4173b6"});
+        });
+        $("#bod_l_i5i").blur(function(){
+            let password=$("#bod_l_i4i").val();
+            let password1=$("#bod_l_i5i").val();
+            if(password==password1){
+                $("#bod_l_is3").css({display:"block"});
+            }
+            $("#bod_l_i5").css({border:"1px solid #bfbfbf"});
+        });
+            
+        $("#bod_l_i7").click(function(){
+            let username=$("#bod_l_i1i").val();
+            let password=$("#bod_l_i4i").val();
+            let password1=$("#bod_l_i5i").val();
+            let yzm=$("#bod_l_i2i").val();
+            let sjyzm=$("#bod_l_i3i").val();
+            console.log(username);
+            if(username==""){
+                alert("请输入手机号");
+            }else{
+                let num = show_num.join("");
+                if(yzm==""){
+                    alert("请输入验证码");
+                }else if(yzm!=num){
+                    alert("验证码输入错误");
+                    $("#bod_l_i2i").val();
+                }else{
+                    if(sjyzm==""){
+                        alert("请输入手机验证码");
+                    }else{
+                        if(password==""){
+                            alert("请输入密码");
+                        }else{
+                            if(password1==""){
+                                alert("请再次输入密码");
+                            }else if(password1!=password){
+                                alert("两次密码不一致");
+                            }else{
+                                $.get("checkuser1.php",{"username":username,"passwords":password},function(data){
+                                    if(data==1){
+                                        alert("注册成功");
+                                        location.href="enter.html";
+                                    }else{
+                                        alert("注册失败")
+                                    }
+                                });
+                            }
+                        }
+                    }
+                }
+            }
+
+
+
+              
+            
+        });
+
+        // 验证码
+        var show_num = [];
+        draw(show_num);
+        $("#canvas1").on('click',function(){
+            draw(show_num);
+        })
+    })
+
+
+
+
+
+
+    // 验证码样式
+function draw(show_num) {
+    var canvas_width=$('#canvas1').width();
+    var canvas_height=$('#canvas1').height();
+    var canvas = document.getElementById("canvas1");//获取到canvas的对象，演员
+    var context = canvas.getContext("2d");//获取到canvas画图的环境，演员表演的舞台
+    canvas.width = canvas_width;
+    canvas.height = canvas_height;
+    var sCode = "1,2,3,4,5,6,7,8,9,0";
+    var aCode = sCode.split(",");
+    var aLength = aCode.length;//获取到数组的长度
+    
+    for (var i = 0; i <= 4; i++) {
+        var j = Math.floor(Math.random() * aLength);//获取到随机的索引值
+        // var deg = Math.random() * 0 * Math.PI / 180;//产生0~30之间的随机弧度
+        var txt = aCode[j];//得到随机的一个内容
+        show_num[i] = txt.toLowerCase();
+        var x = 10 + i * 14;//文字在canvas上的x坐标
+        var y = 30;//文字在canvas上的y坐标
+        context.font = "bold 23px 微软雅黑";
+        context.translate(x, y); 
+        context.fillStyle = randomColor();
+        context.fillText(txt, 0, 0);
+        context.translate(-x, -y);
+    }
+    //验证码上显示线条
+    for (var i = 0; i <= 5; i++) { 
+        context.strokeStyle = randomColor();
+        context.beginPath();
+        context.moveTo(Math.random() * canvas_width, Math.random() * canvas_height);
+        context.lineTo(Math.random() * canvas_width, Math.random() * canvas_height);
+        context.stroke();
+    }
+    //验证码上显示小点
+    for (var i = 0; i <= 30; i++) { 
+        context.strokeStyle = randomColor();
+        context.beginPath();
+        var x = Math.random() * canvas_width;
+        var y = Math.random() * canvas_height;
+        context.moveTo(x, y);
+        context.lineTo(x + 1, y + 1);
+        context.stroke();
+    }
+}
+function randomColor() {//得到随机的颜色值
+    var r = Math.floor(Math.random() * 256);
+    var g = Math.floor(Math.random() * 256);
+    var b = Math.floor(Math.random() * 256);
+    return "rgb(" + r + "," + g + "," + b + ")";
+}
+</script>
